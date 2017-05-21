@@ -1,0 +1,114 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="admin/header::header">
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:include="admin/common::common"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">
+                            文章发布
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <form role="form" th:action="${#lists.isEmpty(blog)}?'/admin/add-article':'/admin/article/update'" method="POST">
+                            <input type="hidden" name="id" th:if="${not #lists.isEmpty(blog)}" th:value="${#lists.isEmpty(blog)}?'':${blog.id}">
+                            <input type="hidden" name="createTime" th:if="${not #lists.isEmpty(blog)}" th:value="${#lists.isEmpty(blog)}?'':${blog.createTime}">
+                            <input type="hidden" name="createBy" th:if="${not #lists.isEmpty(blog)}" th:value="${#lists.isEmpty(blog)}?'':${blog.createBy}">
+                            <div class="form-group col-md-12" style="padding: 0 10px 0 0;">
+                                <input type="text" th:value="${#lists.isEmpty(blog)}?'':${blog.title}" required class="form-control" placeholder="请输入文章标题（必须）" name="title"/>
+                            </div>
+
+                            <div class="form-group col-md-12" style="padding: 0 10px 0 0;">
+                                <select class="form-control" id="categroy" name="tags">
+                                    <!--<option th:if="${#lists.isEmpty(blog)}" value="Java">Blog null</option>
+                                    <option th:unless="${#lists.isEmpty(blog)}" value="Java">Blog not null</option>-->
+                                    <option th:if="${#lists.isEmpty(blog)}" th:each="tag:${tagList}" th:value="${tag.tagname}" th:text="${tag.tagname}"></option>
+                                    <option th:unless="${#lists.isEmpty(blog)}" th:each="tag:${tagList}" th:value="${tag.tagname}" th:text="${tag.tagname}" th:selected="${blog.tags==tag.tagname}"></option>
+                                  <!-- <option value="Java">Java</option>
+                                    <option value="数据库">数据库</option>-->
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-12" style="padding: 0 10px 0 0;">
+                                <textarea name="keywords" th:text="${#lists.isEmpty(blog)}?'':${blog.keywords}" class="form-control" rows="3" required placeholder="概述"></textarea>
+                            </div>
+
+                            <div class="form-group col-md-6">
+
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                            <textarea required style="height: 350px" name="content" th:utext="${#lists.isEmpty(blog)}?'':${blog.content}" autocomplete="off" id="content">
+
+                            </textarea>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="text-right">
+                                <a class="btn btn-default waves-effect waves-light" href="/admin/article">返回列表</a>
+                                <button id="submit_article" type="submit" th:text="${#lists.isEmpty(blog)}?'保存文章':'更新文章'" class="btn btn-primary waves-effect waves-light">
+
+                                </button>
+                                <button type="button" class="btn btn-warning waves-effect waves-light">
+                                    存为草稿
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/plugings/wangeditor/dist/js/wangEditor.js"></script>
+<script>
+    var editor = new wangEditor('content');
+    editor.create();
+    /*$('#submit_article').click(function () {
+        var title = $('#title').val();
+        if(title===''){
+            alert('标题不能为空');
+            return;
+        }
+        var categroy = $('#categroy option:selected').val();
+        var keyword = $('#keyword').val();
+        if(keyword===''){
+            alert('概述不能为空');
+            return;
+        }
+        var content = $('#content').val().trim();
+        if(content===''){
+            alert('内容不能为空');
+            return;
+        }
+
+        var blog = new Object();
+        blog.title = title;
+        blog.tags = categroy;
+        blog.keywords = keyword;
+        blog.content = content;
+        console.log(blog);
+        $.ajax({
+            url:'/admin/add-article',
+            type:'POST',
+            async:true,
+            data : blog,
+            success:function (data) {
+                if (data===-1){
+                    alert("fail");
+                }else if(data==1) {
+                    alert("success");
+                }
+            }
+        });
+    });*/
+</script>
+</body>
+</html>
